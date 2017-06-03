@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author lhfba
+ * @author LuizHenrique
  */
 public class User {
     String name, user, password, email, country, language, telephone;

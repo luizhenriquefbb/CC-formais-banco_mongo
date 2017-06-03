@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  *
- * @author lhfba
+ * @author LuizHenrique
  */
 public class Twitter {
     String code, content;
@@ -30,8 +30,9 @@ public class Twitter {
     public Twitter(String content) {
         this.content = content;
         date = new Date();
-        splitHastags(content);
         this.hastags = new ArrayList<>();
+        splitHastags(content);
+        
     }
 
     public Twitter(String code, String content, Date date, String answer, ArrayList<String> hastags) {
@@ -54,7 +55,12 @@ public class Twitter {
         String[] hashs = n_content.split("#");
         
         for (String s : hashs){
-            hastags.add(s);
+            if (s.matches("[ ]*")){
+                //não adicionar vazio
+            } else {
+                hastags.add(s);
+            }
+            
         }
         
         
