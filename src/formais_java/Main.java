@@ -148,7 +148,7 @@ public class Main {
                     
                     
                 case 6: //buscar por email
-                    System.out.println("Digite email a ser buscado:");
+                   System.out.println("Digite email a ser buscado:");
                     email = read.nextLine();
                     tempoInicial = System.currentTimeMillis();
                     
@@ -209,7 +209,7 @@ public class Main {
                     }
                     System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
                     break;
-                    
+              
                 case 12: //Buscar uma hashtag
                     System.out.println("Digite a hashtag a ser buscada");
                     hashtag = read.nextLine();
