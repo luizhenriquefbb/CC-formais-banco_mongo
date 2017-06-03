@@ -187,7 +187,6 @@ public class Main {
                     System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial));
                     break;
                     
-                    
                 case 11: //Buscar uma hashtag
                     System.out.println("Em densenvolvimento...");
                     break;
