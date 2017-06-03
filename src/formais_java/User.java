@@ -1,7 +1,11 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Desenvolvio para a cadeira de Linguagens formais, professor Andrei _______
+ * 
+ * 
+ * Desenvolvedores:
+ * * Luiz Henrique Freire Barros (email: luizhenriquefbb@gmail.com)
+ * * Gabriel Belarmino (email: ____)
+ * 2017
  */
 package formais_java;
 
@@ -48,6 +52,7 @@ public class User {
         this.country = country;
         this.language = language;
         this.telephone = telephone;
+        this.tweet = twitter;
         this.follow = follow;
         this.followed = followed;
     }
@@ -69,9 +74,5 @@ public class User {
                 ;
     }
     
-    public void set_tweet(String id, String content){
-        this.tweet.add(new Twitter(content));
-        //TODO: setar no banco
-    }
     
 }

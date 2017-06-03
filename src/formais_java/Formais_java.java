@@ -14,9 +14,10 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
+import java.util.ArrayList;
 import java.util.Scanner;
 import org.bson.Document;
-
+//TODO: cronometrar os metodos
 
 /**
  *
@@ -41,8 +42,9 @@ public class Formais_java {
     public static void main(String[] args) {
         int op;
         buidCollectionUser();
-//        buildCollectionTwitter();
+        buildCollectionTwitter();
         
+        long tempoInicial;
         int x; // ler qnt de usuários
         User user_obj; //resultado dos retornos do menu
         String name, user, password, email, country, language, telephone; //case2
@@ -58,7 +60,9 @@ public class Formais_java {
                 case 1: //gerar x usuários genéricos automaticamente
                     System.out.println("Quantos usuários genéricos criar?");
                     x = read.nextInt();
+                    tempoInicial = System.currentTimeMillis();
                     DBOperations.generateUsers(x);
+                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial));
                     break;
                     
                 case 2: //gerar um usuario personalizado
@@ -80,33 +84,117 @@ public class Formais_java {
                     DBOperations.inserindo(new User(name, user, password, email, country, language, telephone));
                     break;
                     
-                case 3: //busca por telefone
-                    //System.out.println("Em densenvolvimento...");
+                case 3: //busca por nome
+                    System.out.println("Digite nome a ser buscado:");
+                    String nome = read.nextLine();
+                    tempoInicial = System.currentTimeMillis();
+                    
+                    ArrayList<User> search = DBOperations.findUserByName(nome);
+                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial));
+                    System.out.println("encontrado "+search.size()+" usuários\n");
+                    for (User u: search){
+                        System.out.println(u);
+                    }
+                    break;
+                    
+                case 4: //busca por telefone
                     System.out.println("Digite telefone a ser buscado:");
                     telephone = read.nextLine();
-                    user_obj = DBOperations.findUserByTelefone(telephone);
+                    tempoInicial = System.currentTimeMillis();
                     
+                    user_obj = DBOperations.findUserByTelefone(telephone);
+                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial));
                     if (user_obj != null){
                         System.out.println("retorno da busca:\n"
                                 + user_obj);
                     }else{
-                        System.out.println("nenhum encontrado encontrado");
+                        System.out.println("nenhum encontrado");
                     }
                     break;
-                case 4: //remover usuário
+                    
+                    
+                case 5: //bus por nick
+                    System.out.println("Digite nick a ser buscado:");
+                    String nick = read.nextLine();
+                    tempoInicial = System.currentTimeMillis();
+                    
+                    user_obj = DBOperations.findUserByNick(nick);
+                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial));
+                    if (user_obj != null){
+                        System.out.println("retorno da busca:\n"
+                                + user_obj);
+                    }else{
+                        System.out.println("nenhum encontrado");
+                    }
+                    break;
+                    
+                    
+                case 6: //buscar por email
+                   System.out.println("Digite email a ser buscado:");
+                    String email_ = read.nextLine();
+                    tempoInicial = System.currentTimeMillis();
+                    
+                    user_obj = DBOperations.findUserByEmail(email_);
+                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial));
+                    if (user_obj != null){
+                        System.out.println("retorno da busca:\n"
+                                + user_obj);
+                    }else{
+                        System.out.println("nenhum encontrado");
+                    }
+                    break;
+                    
+                    
+                    
+                    
+                case 7: //remover usuário
                     System.out.println("Em densenvolvimento...");
                     break;
                     
-                case 5: //limpar tabela de usuario
+                case 8: //limpar tabela de usuario
+                    tempoInicial = System.currentTimeMillis();
+                    
                     DBOperations.clearCollectionUser();
+                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial));
                     break;
                     
-                case 6: //twittar
+                case 9: //twittar
+                    System.out.println("digite o user que twitta");
+                    String us = read.nextLine();
+                    User u = DBOperations.findUserByNick(us);
+                    if (u == null){
+                        System.err.println("usuario nao existe");
+                        break;
+                    }
+                    
+                    System.out.println("digite o TWITTER");
+                    String twi = read.nextLine();
+                    DBOperations.Twittar(u);
+                    //TODO: DBOperations.Twittar(u,twi);
+                    break;
+                case 10://Twittar Massivo
+                    User twitteiro;
+                    System.out.println("Quantos Usuarios");
+                    int n_user = read.nextInt();
+                    System.out.println("Quantos Tweets");
+                    int n_tweets = read.nextInt();
+                    tempoInicial = System.currentTimeMillis();
+                    for(int i = 0;i < n_user; i++){
+                        twitteiro = DBOperations.findUserByNick("@user"+i);
+                        for(int j = 0; j < n_tweets; j++){
+                            DBOperations.Twittar(twitteiro);
+                        }     
+                    }
+                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial));
+                    break;
+                case 11: //Buscar uma hashtag
                     System.out.println("Em densenvolvimento...");
                     break;
                     
-                case 7: //Buscar uma hashtag
-                    System.out.println("Em densenvolvimento...");
+                case 12: //usuario seguir outro
+                    User a = DBOperations.findUserByNick("@user0");
+                    User b = DBOperations.findUserByNick("@user1");
+                    DBOperations.generateFollower(a,b);
                     break;
             }
         }while (op != 0);
@@ -132,35 +220,34 @@ public class Formais_java {
     private static void buildCollectionTwitter(){
         //setando '_id' como indice unique
         IndexOptions indexOptions = new IndexOptions().unique(true);
-        collection_twitteres.createIndex(Indexes.ascending("_id"), indexOptions);
+        collection_twitteres.createIndex(Indexes.ascending("Code"), indexOptions);
     }
       
     
     private static String menu(){
         return(
-                  "======================\n"
+                  "\n\n\n\n\n======================\n"
                 + "0 - sair\n"
                 + "1 - gerar x usuários genericos\n"
-                + "2 - adicionar um usuario\n"
-                + "3 - buscar usuario por telefone\n"
-                + "4 - remover usuario\n"
-                + "5 - limpar tabela de usuarios\n"
-                + "6 - twettar\n"
-                + "7 - Buscar uma hashtag\n"
+                + "2 - adicionar um usuario\n\n"
+                
+                + "3 - buscar por nome\n"
+                + "4 - buscar usuario por telefone\n"
+                + "5 - buscar por nick\n"
+                + "6 - buscar por email\n\n"
+                
+                + "7 - remover usuario\n"
+                + "8 - limpar tabela de usuarios\n\n"
+                
+                + "9 - twittar\n"
+                + "10 - Varios Tweets\n"
+                + "11 - Buscar uma hashtag\n\n"
+                
+                + "12 - usuario seguir outro\n"
                 + "=====================");
         
     }
     
-//    /**
-//     * método que cria x usuários
-//     * @return list_of_users
-//     */
-//    private static ArrayList<User> getUsers_old(){
-//        ArrayList<User> users_list = new ArrayList<>();
-//	for (int i=0; i < 500; i++)
-//            users_list.add(new User("nome"+(i), "@user"+(i)));
-//
-//	return users_list;
-//    }
+
     
 }
