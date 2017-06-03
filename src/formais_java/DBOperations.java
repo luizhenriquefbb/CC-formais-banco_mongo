@@ -62,7 +62,6 @@ public class DBOperations {
      * @author LuizHenrique
      */
     public static void generateUsers(int x){
-        long tempoInicial = System.currentTimeMillis();
         
         User tem_user;
         for (int i=0; i < x; i++){
@@ -76,8 +75,6 @@ public class DBOperations {
             }
         }
         
-        System.out.println("o metodo de gerar " + x + " usuarios executou em "
-                +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
     }
     
     /**
@@ -243,6 +240,15 @@ public class DBOperations {
         DeleteResult deleteResult = collection_users.deleteMany(gte("Nome", "")); //delentando tudo de 'users'
         System.out.println("deletou " + deleteResult.getDeletedCount());
     }
+    
+    /**
+     * Deletar em massa: coloca os parametros (campo, valor_minimo) Parametros:
+     * valor_minimo == deleta registros maiores ou igual ao valor minimo 
+     */
+    static void clearCollectionTwitts() {
+        DeleteResult deleteResult = collection_twitteres.deleteMany(gte("Conteudo", "")); //delentando tudo de 'Twitter'
+        System.out.println("deletou " + deleteResult.getDeletedCount());
+    }
 
     /**
      * gera uma lista de tt pre determinados e desses, escolhe um aleatoriamente
@@ -288,7 +294,6 @@ public class DBOperations {
         Twitter t = new Twitter(tweet);
         
         //seta o codigo do twitter
-        //TODO: isso ficaria no construtor
         t.code = u.user+"-"+(u.tweet.size());
         
         Document doc1 = tweetToDocument(t);
@@ -320,7 +325,6 @@ public class DBOperations {
         Twitter t = new Twitter(message);
         
         //seta o codigo do twitter
-        //TODO: isso ficaria no construtor
         t.code = u.user+"-"+(u.tweet.size());
         
         Document doc1 = tweetToDocument(t);
@@ -347,9 +351,9 @@ public class DBOperations {
      * @return ArrayList<Twitter> ou null
      * 
      */
-    public ArrayList<Twitter> findHastags(String hashtag){
+    public static ArrayList<Twitter> findHastags(String hashtag){
         ArrayList<Twitter> tweets = new ArrayList<>();
-        MongoCursor<Document> cursor = collection_twitteres.find(eq("hashtags", hashtag)).iterator();
+        MongoCursor<Document> cursor = collection_twitteres.find(eq("Hashtags", hashtag)).iterator();
         Document doc = new Document();
         while (cursor.hasNext()) {
             doc = cursor.next();
@@ -364,8 +368,11 @@ public class DBOperations {
             ));
 
         }
-            
-        return tweets;
+        
+        if (tweets.size() > 0)
+            return tweets;
+        else
+            return null;
     }
     
     
