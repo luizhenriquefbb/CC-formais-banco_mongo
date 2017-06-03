@@ -107,7 +107,7 @@ public class Main {
                     
                     ArrayList<User> search = DBOperations.findUserByName(name);
                     
-                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
+                    System.out.println("busca executada em " +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
                     
                     System.out.println("encontrado "+search.size()+" usuários\n");
                     for (User u: search){
@@ -121,7 +121,7 @@ public class Main {
                     tempoInicial = System.currentTimeMillis();
                     
                     user_obj = DBOperations.findUserByTelefone(telephone);
-                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
+                    System.out.println("busca executada em " +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
                     if (user_obj != null){
                         System.out.println("retorno da busca:\n"
                                 + user_obj);
@@ -137,7 +137,7 @@ public class Main {
                     tempoInicial = System.currentTimeMillis();
                     
                     user_obj = DBOperations.findUserByNick(nick);
-                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
+                    System.out.println("busca executada em " +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
                     if (user_obj != null){
                         System.out.println("retorno da busca:\n"
                                 + user_obj);
@@ -153,7 +153,7 @@ public class Main {
                     tempoInicial = System.currentTimeMillis();
                     
                     user_obj = DBOperations.findUserByEmail(email);
-                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
+                    System.out.println("busca executada em " +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
                     if (user_obj != null){
                         System.out.println("retorno da busca:\n"
                                 + user_obj);
@@ -170,14 +170,14 @@ public class Main {
                     tempoInicial = System.currentTimeMillis();
                     
                     DBOperations.clearCollectionUser();
-                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
+                    System.out.println("tabela limpa em " +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
                     break;
                     
                 case 9: //limpar tabela de twitter
                     tempoInicial = System.currentTimeMillis();
                     
                     DBOperations.clearCollectionTwitts();
-                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
+                    System.out.println("tabela limpa em " +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
                     break;
                     
                 case 10: //twittar
@@ -191,7 +191,6 @@ public class Main {
                     
                     System.out.println("digite o TWITTER");
                     message = read.nextLine();
-                    //DBOperations.twittarRandom(u);
                     DBOperations.twittar(user_obj,message);
                     break;
                     
@@ -212,10 +211,9 @@ public class Main {
                     break;
                     
                 case 12: //Buscar uma hashtag
-                    System.out.println("Em densenvolvimento..."); //TODO
                     System.out.println("Digite a hashtag a ser buscada");
                     hashtag = read.nextLine();
-                    ArrayList<Twitter> search_twitter = DBOperations.findHastags(hashtag);
+                    ArrayList<Twitter> search_twitter = DBOperations.findHashtags(hashtag);
                     if (search_twitter == null){
                         System.out.println("hashtag nao encontrada");
                         break;

@@ -31,7 +31,7 @@ public class Twitter {
         this.content = content;
         date = new Date();
         this.hashtags = new ArrayList<>();
-        splitHastags(content);
+        splitHashtags(content);
         
     }
 
@@ -44,7 +44,7 @@ public class Twitter {
     
     
     
-    private void splitHastags (String content){
+    private void splitHashtags (String content){
         String[] n_hastags = content.split("#[^\\s]+");
         
         String n_content = content;

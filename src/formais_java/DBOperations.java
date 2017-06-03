@@ -14,7 +14,6 @@ package formais_java;
 
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCursor;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.gte;
 import com.mongodb.client.result.DeleteResult;
@@ -40,9 +39,9 @@ public class DBOperations {
     public static boolean inserindo(User user){
         Document doc1 = new Document();
         doc1.append("Nome",user.name).append("Telefone",user.telephone).append("User",user.user)
-                 .append("Senha", user.password).append("email",user.email).append("País",user.country)
-                 .append("Lingua", user.language).append("tweet", user.tweet).append("segue", user.follow)
-                 .append("seguido", user.followed);
+                 .append("Senha", user.password).append("Email",user.email).append("País",user.country)
+                 .append("Lingua", user.language).append("Tweet", user.tweet).append("Segue", user.follow)
+                 .append("Seguido", user.followed);
         
         try{
             collection_users.insertOne(doc1);
@@ -78,14 +77,14 @@ public class DBOperations {
     }
     
     /**
-     * um usuário "é seguido" por outro e esse outro "segue" o primeiro
+     * um usuário "é seguido" por outro e esse outro "Segue" o primeiro
      * @param User
      * @param User 
      */
     public static void generateFollower(User a,User b){
         
-        collection_users.updateOne(eq("User", a.user), new Document("$addToSet", new Document("segue", b.user)));
-        collection_users.updateOne(eq("User", b.user), new Document("$addToSet", new Document("seguido", a.user)));
+        collection_users.updateOne(eq("User", a.user), new Document("$addToSet", new Document("Segue", b.user)));
+        collection_users.updateOne(eq("User", b.user), new Document("$addToSet", new Document("Seguido", a.user)));
 
     }
 
@@ -106,9 +105,9 @@ public class DBOperations {
                     (String) doc1.get("País"),
                     (String) doc1.get("Língua"),
                     (String) doc1.get("Telefone"),
-                    (ArrayList<Twitter>) doc1.get("tweet"),
-                    (ArrayList<User>) doc1.get("segue"),
-                    (ArrayList<User>) doc1.get("seguido"));
+                    (ArrayList<Twitter>) doc1.get("Tweet"),
+                    (ArrayList<User>) doc1.get("Segue"),
+                    (ArrayList<User>) doc1.get("Seguido"));
         }else {
             return null;
         }
@@ -143,9 +142,9 @@ public class DBOperations {
                     (String) doc1.get("País"),
                     (String) doc1.get("Língua"),
                     (String) doc1.get("Telefone"),
-                    (ArrayList<Twitter>) doc1.get("tweet"),
-                    (ArrayList<User>) doc1.get("segue"),
-                    (ArrayList<User>) doc1.get("seguido"));
+                    (ArrayList<Twitter>) doc1.get("Tweet"),
+                    (ArrayList<User>) doc1.get("Segue"),
+                    (ArrayList<User>) doc1.get("Seguido"));
             
             users.add(user);
         
@@ -172,9 +171,9 @@ public class DBOperations {
                     (String) doc1.get("País"),
                     (String) doc1.get("Língua"),
                     (String) doc1.get("Telefone"),
-                    (ArrayList<Twitter>) doc1.get("tweet"),
-                    (ArrayList<User>) doc1.get("segue"),
-                    (ArrayList<User>) doc1.get("seguido"));
+                    (ArrayList<Twitter>) doc1.get("Tweet"),
+                    (ArrayList<User>) doc1.get("Segue"),
+                    (ArrayList<User>) doc1.get("Seguido"));
         } else {
             return null;
         }
@@ -203,9 +202,9 @@ public class DBOperations {
                     (String) doc1.get("País"),
                     (String) doc1.get("Língua"),
                     (String) doc1.get("Telefone"),
-                    (ArrayList<Twitter>) doc1.get("tweet"),
-                    (ArrayList<User>) doc1.get("segue"),
-                    (ArrayList<User>) doc1.get("seguido"));
+                    (ArrayList<Twitter>) doc1.get("Tweet"),
+                    (ArrayList<User>) doc1.get("Segue"),
+                    (ArrayList<User>) doc1.get("Seguido"));
         }else {
             System.out.println("o metodo executou em "
                 +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
@@ -219,16 +218,16 @@ public class DBOperations {
     static Document userToDocument(User u){
         Document doc1 = new Document();
         doc1.append("Nome",u.name).append("Telefone",u.telephone).append("User",u.user)
-                 .append("Senha", u.password).append("email",u.email).append("País",u.country)
-                 .append("Lingua", u.language).append("tweet", u.tweet).append("segue", u.follow)
-                 .append("seguido", u.followed);
+                 .append("Senha", u.password).append("Email",u.email).append("País",u.country)
+                 .append("Lingua", u.language).append("Tweet", u.tweet).append("Segue", u.follow)
+                 .append("Seguido", u.followed);
         return doc1;
     }
     
     static Document tweetToDocument(Twitter t){
         Document doc1 = new Document();
         doc1.append("Conteudo",t.content).append("Em_Resposa_a",t.answer).append("Code",t.code)
-                 .append("Data", t.date).append("Favoritos",t.favorits).append("Hastags", t.hashtags);
+                 .append("Data", t.date).append("Favoritos",t.favorits).append("Hashtags", t.hashtags);
         return doc1;
     }
 
@@ -302,7 +301,7 @@ public class DBOperations {
             Document a = collection_twitteres.find(eq("Code",t.code)).first();
             ObjectId obj = a.getObjectId("_id");
             if(obj!= null)
-                collection_users.updateOne(eq("User", u.user), new Document("$addToSet", new Document("tweet", obj)));
+                collection_users.updateOne(eq("User", u.user), new Document("$addToSet", new Document("Tweet", obj)));
             else
                 System.err.println("falha nossa:Falha no update de Tweet");
         }catch (MongoWriteException e){
@@ -333,7 +332,7 @@ public class DBOperations {
             Document a = collection_twitteres.find(eq("Code",t.code)).first();
             ObjectId obj = a.getObjectId("_id");
             if(obj!= null)
-                collection_users.updateOne(eq("User", u.user), new Document("$addToSet", new Document("tweet", obj)));
+                collection_users.updateOne(eq("User", u.user), new Document("$addToSet", new Document("Tweet", obj)));
             else
                 System.err.println("falha nossa:Falha no update de Tweet");
         }catch (MongoWriteException e){
@@ -351,14 +350,11 @@ public class DBOperations {
      * @return ArrayList<Twitter> ou null
      * 
      */
-    public static ArrayList<Twitter> findHastags(String hashtag){
+    public static ArrayList<Twitter> findHashtags(String hashtag){
         ArrayList<Twitter> tweets = new ArrayList<>();
-        MongoCursor<Document> cursor = collection_twitteres.find(eq("Hashtags", hashtag)).iterator();
-        Document doc = new Document();
-        while (cursor.hasNext()) {
-            doc = cursor.next();
+        FindIterable<Document> cursor = collection_twitteres.find(eq("Hashtags", hashtag));
+        for (Document doc : cursor){
 
-            //String code, String content, Date date, String answer, ArrayList<String> hashtags
             tweets.add(new Twitter(
                     (String) doc.get("Code"),
                     (String) doc.get("Conteudo"),
