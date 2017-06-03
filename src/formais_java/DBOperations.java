@@ -62,7 +62,6 @@ public class DBOperations {
      * @author LuizHenrique
      */
     public static void generateUsers(int x){
-        long tempoInicial = System.currentTimeMillis();
         
         User tem_user;
         for (int i=0; i < x; i++){
@@ -76,8 +75,6 @@ public class DBOperations {
             }
         }
         
-        System.out.println("o metodo de gerar " + x + " usuarios executou em "
-                +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
     }
     
     /**
@@ -288,7 +285,6 @@ public class DBOperations {
         Twitter t = new Twitter(tweet);
         
         //seta o codigo do twitter
-        //TODO: isso ficaria no construtor
         t.code = u.user+"-"+(u.tweet.size());
         
         Document doc1 = tweetToDocument(t);
@@ -320,7 +316,6 @@ public class DBOperations {
         Twitter t = new Twitter(message);
         
         //seta o codigo do twitter
-        //TODO: isso ficaria no construtor
         t.code = u.user+"-"+(u.tweet.size());
         
         Document doc1 = tweetToDocument(t);

@@ -17,7 +17,6 @@ import com.mongodb.client.model.Indexes;
 import java.util.ArrayList;
 import java.util.Scanner;
 import org.bson.Document;
-//TODO: cronometrar os metodos
 
 /**
  *
@@ -47,7 +46,8 @@ public class Main {
         long tempoInicial;
         int x; // ler qnt de usuários
         User user_obj; //resultado dos retornos do menu
-        String name, user, password, email, country, language, telephone; //case2
+        String name, nick, user, password, email, country, language, telephone; //leituras de teclado
+        String message;
         do{
             System.out.println(menu());
             Scanner read = new Scanner(System.in);
@@ -60,8 +60,11 @@ public class Main {
                 case 1: //gerar x usuários genéricos automaticamente
                     System.out.println("Quantos usuários genéricos criar?");
                     x = read.nextInt();
+                    
                     tempoInicial = System.currentTimeMillis();
+                    
                     DBOperations.generateUsers(x);
+                    
                     System.out.println("o metodo gerou esses usuarios em " +(float)(  System.currentTimeMillis() - tempoInicial) + 
                             "milisegudos");
                     break;
@@ -69,29 +72,41 @@ public class Main {
                 case 2: //gerar um usuario personalizado
                     System.out.println("digite nome do usuário");
                     name = read.nextLine();
+                    
                     System.out.println("digite user do usuário");
                     user = read.nextLine();
+                    
                     System.out.println("digite senha do usuário");
                     password = read.nextLine();
+                    
                     System.out.println("digite email do usuário");
                     email = read.nextLine();
                     System.out.println("digite pais do usuário");
                     country = read.nextLine();
+                    
                     System.out.println("digite lingua do usuário");
                     language = read.nextLine();
+                    
                     System.out.println("digite telefone do usuário");
                     telephone = read.nextLine();
                     
+                    tempoInicial = System.currentTimeMillis();
+                    
                     DBOperations.inserindo(new User(name, user, password, email, country, language, telephone));
+                    
+                    System.out.println("o metodo gerou esse usuario em " +(float)(  System.currentTimeMillis() - tempoInicial) + 
+                            "milisegudos");
                     break;
                     
                 case 3: //busca por nome
                     System.out.println("Digite nome a ser buscado:");
-                    String nome = read.nextLine();
+                    name = read.nextLine();
                     tempoInicial = System.currentTimeMillis();
                     
-                    ArrayList<User> search = DBOperations.findUserByName(nome);
-                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial));
+                    ArrayList<User> search = DBOperations.findUserByName(name);
+                    
+                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
+                    
                     System.out.println("encontrado "+search.size()+" usuários\n");
                     for (User u: search){
                         System.out.println(u);
@@ -104,7 +119,7 @@ public class Main {
                     tempoInicial = System.currentTimeMillis();
                     
                     user_obj = DBOperations.findUserByTelefone(telephone);
-                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial));
+                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
                     if (user_obj != null){
                         System.out.println("retorno da busca:\n"
                                 + user_obj);
@@ -116,11 +131,11 @@ public class Main {
                     
                 case 5: //bus por nick
                     System.out.println("Digite nick a ser buscado:");
-                    String nick = read.nextLine();
+                    nick = read.nextLine();
                     tempoInicial = System.currentTimeMillis();
                     
                     user_obj = DBOperations.findUserByNick(nick);
-                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial));
+                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
                     if (user_obj != null){
                         System.out.println("retorno da busca:\n"
                                 + user_obj);
@@ -132,11 +147,11 @@ public class Main {
                     
                 case 6: //buscar por email
                    System.out.println("Digite email a ser buscado:");
-                    String email_ = read.nextLine();
+                    email = read.nextLine();
                     tempoInicial = System.currentTimeMillis();
                     
-                    user_obj = DBOperations.findUserByEmail(email_);
-                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial));
+                    user_obj = DBOperations.findUserByEmail(email);
+                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
                     if (user_obj != null){
                         System.out.println("retorno da busca:\n"
                                 + user_obj);
@@ -153,22 +168,22 @@ public class Main {
                     tempoInicial = System.currentTimeMillis();
                     
                     DBOperations.clearCollectionUser();
-                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial));
+                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
                     break;
                     
                 case 9: //twittar
                     System.out.println("digite o user que twitta");
-                    String us = read.nextLine();
-                    User u = DBOperations.findUserByNick(us);
+                    nick = read.nextLine();
+                    User u = DBOperations.findUserByNick(nick);
                     if (u == null){
                         System.err.println("usuario nao existe");
                         break;
                     }
                     
                     System.out.println("digite o TWITTER");
-                    String twi = read.nextLine();
+                    message = read.nextLine();
                     //DBOperations.twittarRandom(u);
-                    DBOperations.twittar(u,twi);
+                    DBOperations.twittar(u,message);
                     break;
                     
                 case 10://Twittar Massivo
@@ -177,6 +192,7 @@ public class Main {
                     int n_user = read.nextInt();
                     System.out.println("Quantos Tweets");
                     int n_tweets = read.nextInt();
+                    
                     tempoInicial = System.currentTimeMillis();
                     for(int i = 0;i < n_user; i++){
                         twitteiro = DBOperations.findUserByNick("@user"+i);
@@ -184,11 +200,11 @@ public class Main {
                             DBOperations.twittarRandom(twitteiro);
                         }     
                     }
-                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial));
+                    System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
                     break;
                     
                 case 11: //Buscar uma hashtag
-                    System.out.println("Em densenvolvimento...");
+                    System.out.println("Em densenvolvimento..."); //TODO
                     break;
                     
                 case 12: //usuario seguir outro
@@ -200,11 +216,8 @@ public class Main {
         }while (op != 0);
         
         
-        
-        
-        
 //        long tempoInicial = System.currentTimeMillis();
-//        System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial));
+//        System.out.println("o metodo executou em " +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
     }
     
  
