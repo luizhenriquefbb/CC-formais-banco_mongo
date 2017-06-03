@@ -1,5 +1,5 @@
 /*
- * Desenvolvio para a cadeira de Linguagens formais, professor Andrei _______
+ * Desenvolvido para a cadeira de Linguagens formais, professor Andrei _______
  * 
  * 
  * Desenvolvedores:
@@ -18,20 +18,26 @@ import com.mongodb.client.MongoCursor;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.gte;
 import com.mongodb.client.result.DeleteResult;
-import static formais_java.Formais_java.collection_users;
-import static formais_java.Formais_java.collection_twitteres;
+import static formais_java.Main.collection_users;
+import static formais_java.Main.collection_twitteres;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
 /**
- * Metodo que insere um registro na collection de users
- * @author lhfba
+ * Classe que lida com as operações com o BD
+ * @author LuizHenrique & Gabriel
  */
 public class DBOperations {
-    public static boolean inserindo(User user) throws MongoWriteException{
+    /**
+     * insere um user à classe de usuários
+     * @param user
+     * @return boolean - inserido com sucesso ou não
+     */
+    public static boolean inserindo(User user){
         Document doc1 = new Document();
         doc1.append("Nome",user.name).append("Telefone",user.telephone).append("User",user.user)
                  .append("Senha", user.password).append("email",user.email).append("País",user.country)
@@ -53,7 +59,7 @@ public class DBOperations {
      * método que cria x usuários e adiciona no banco
      * @param x  numero de usuarios
      * @return void
-     * @author lhfba
+     * @author LuizHenrique
      */
     public static void generateUsers(int x){
         long tempoInicial = System.currentTimeMillis();
@@ -74,6 +80,11 @@ public class DBOperations {
                 +(float)(  System.currentTimeMillis() - tempoInicial) + " milisegundos");
     }
     
+    /**
+     * um usuário "é seguido" por outro e esse outro "segue" o primeiro
+     * @param User
+     * @param User 
+     */
     public static void generateFollower(User a,User b){
         
         collection_users.updateOne(eq("User", a.user), new Document("$addToSet", new Document("segue", b.user)));
@@ -84,12 +95,12 @@ public class DBOperations {
     /**
      * @param nick
      * @return user ou null
-     * @author lhfba
+     * @author LuizHenrique
      */
     public static User findUserByNick(String nick){
         
         User user;
-        Document doc1 = Formais_java.collection_users.find(eq("User", nick)).first();
+        Document doc1 = Main.collection_users.find(eq("User", nick)).first();
         if (doc1 != null){
             user = new User((String) doc1.get("Nome"),
                     (String) doc1.get("User"),
@@ -112,15 +123,15 @@ public class DBOperations {
      * 
      * @param name
      * @return ArrayList(user) ou null
-     * @author lhfba
+     * @author LuizHenrique
      */
     public static ArrayList<User> findUserByName(String name){
         
         User user;
         
         //busca
-        //Document doc1 = Formais_java.collection_users.find(eq("Nome", name)).first();
-        FindIterable<Document> iterable = Formais_java.collection_users.find(eq("Nome", name));
+        //Document doc1 = Main.collection_users.find(eq("Nome", name)).first();
+        FindIterable<Document> iterable = Main.collection_users.find(eq("Nome", name));
         ArrayList<User> users = new ArrayList<>();
         
         if (iterable == null){
@@ -149,13 +160,13 @@ public class DBOperations {
      * 
      * @param email
      * @return user ou null
-     * @author lhfba
+     * @author LuizHenrique
      */
     public static User findUserByEmail(String email){
         User user;
         
         //busca
-        Document doc1 = Formais_java.collection_users.find(eq("Email", email)).first();
+        Document doc1 = Main.collection_users.find(eq("Email", email)).first();
         if (doc1 != null){
             user = new User((String) doc1.get("Nome"),
                     (String) doc1.get("User"),
@@ -179,13 +190,13 @@ public class DBOperations {
      * 
      * @param telefone
      * @return user ou null
-     * @author lhfba
+     * @author LuizHenrique
      */
     public static User findUserByTelefone(String telefone){
         long tempoInicial = System.currentTimeMillis();
         User user;
         
-        Document doc1 = Formais_java.collection_users.find(eq("Telefone", telefone)).first();
+        Document doc1 = Main.collection_users.find(eq("Telefone", telefone)).first();
         
         if (doc1 != null){
             user = new User((String) doc1.get("Nome"),
@@ -220,7 +231,7 @@ public class DBOperations {
     static Document tweetToDocument(Twitter t){
         Document doc1 = new Document();
         doc1.append("Conteudo",t.content).append("Em_Resposa_a",t.answer).append("Code",t.code)
-                 .append("Data", t.date).append("Favoritos",t.favorits).append("Hastags", t.hastags);
+                 .append("Data", t.date).append("Favoritos",t.favorits).append("Hastags", t.hashtags);
         return doc1;
     }
 
@@ -233,7 +244,13 @@ public class DBOperations {
         System.out.println("deletou " + deleteResult.getDeletedCount());
     }
 
-    public static void Twittar(User u){
+    /**
+     * gera uma lista de tt pre determinados e desses, escolhe um aleatoriamente
+     * para twittar
+     * @param u 
+     */
+    public static void twittarRandom(User u){
+        //lista de twitters aleatorios
         String[] tweets = {"#first Primeiro Tweet",
             
                            "#BodyBuilder #Partiu Academia!!",
@@ -266,16 +283,47 @@ public class DBOperations {
                 
          };
         
+        //pega um tt aleatorio
         String tweet = tweets[(int)Math.ceil(Math.random() * tweets.length)-1];
         Twitter t = new Twitter(tweet);
         
-        System.out.println("As hashtags sao " + t.hastags.size());
-        System.out.println(t);
-        
-        
+        //seta o codigo do twitter
+        //TODO: isso ficaria no construtor
         t.code = u.user+"-"+(u.tweet.size());
+        
         Document doc1 = tweetToDocument(t);
-        System.out.println(t.code);
+        try{
+            collection_twitteres.insertOne(doc1);
+            Document a = collection_twitteres.find(eq("Code",t.code)).first();
+            ObjectId obj = a.getObjectId("_id");
+            if(obj!= null)
+                collection_users.updateOne(eq("User", u.user), new Document("$addToSet", new Document("tweet", obj)));
+            else
+                System.err.println("falha nossa:Falha no update de Tweet");
+        }catch (MongoWriteException e){
+            System.err.println("falha nossa");
+        }
+       
+
+        
+    }
+    
+    /**
+     * recebe u usuário e o twitter que ele escreveu. </p>
+     * coloca essa "ligação" no banco
+     * @param user
+     * @param message 
+     * @author luizHenrique
+     */
+    public static void twittar(User u, String message){
+        
+        Twitter t = new Twitter(message);
+        
+        //seta o codigo do twitter
+        //TODO: isso ficaria no construtor
+        t.code = u.user+"-"+(u.tweet.size());
+        
+        Document doc1 = tweetToDocument(t);
         try{
             collection_twitteres.insertOne(doc1);
             Document a = collection_twitteres.find(eq("Code",t.code)).first();
@@ -300,21 +348,24 @@ public class DBOperations {
      * 
      */
     public ArrayList<Twitter> findHastags(String hashtag){
-            ArrayList<Twitter> tweets = new ArrayList<>();
-            MongoCursor<Document> cursor = collection_twitteres.find(eq("hashtags", hashtag)).iterator();
-            Document doc = new Document();
-            while(cursor.hasNext()){
-                doc = cursor.next();
-                //String code, String content, Date date, String answer, ArrayList<String> hastags
-                tweets.add(new Twitter(doc.get("Code"),
-                        doc.get("Conteudo"),
-                        doc.get("Data"),
-                        doc.get("Code"),
-                        doc.get("Code"),
-                        doc.get("Code")
-                ));
-                        
-            }
+        ArrayList<Twitter> tweets = new ArrayList<>();
+        MongoCursor<Document> cursor = collection_twitteres.find(eq("hashtags", hashtag)).iterator();
+        Document doc = new Document();
+        while (cursor.hasNext()) {
+            doc = cursor.next();
+
+            //String code, String content, Date date, String answer, ArrayList<String> hashtags
+            tweets.add(new Twitter(
+                    (String) doc.get("Code"),
+                    (String) doc.get("Conteudo"),
+                    (Date) doc.get("Data"),
+                    (String) doc.get("Em_resposta_a"),
+                    (ArrayList<String>) doc.get("Hashtags")
+            ));
+
+        }
+            
+        return tweets;
     }
     
     

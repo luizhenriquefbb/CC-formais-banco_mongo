@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  *
- * @author lhfba
+ * @author LuizHenrique
  */
 public class Twitter {
     String code, content;
@@ -24,21 +24,22 @@ public class Twitter {
     List<Twitter> coments = null; 
     Date date;
     String answer; // guarda o id da resposta
-    ArrayList<String> hastags;
+    ArrayList<String> hashtags;
 
     
     public Twitter(String content) {
         this.content = content;
         date = new Date();
+        this.hashtags = new ArrayList<>();
         splitHastags(content);
-        this.hastags = new ArrayList<>();
+        
     }
 
-    public Twitter(String code, String content, Date date, String answer, ArrayList<String> hastags) {
+    public Twitter(String code, String content, Date date, String answer, ArrayList<String> hashtags) {
         this.code = code;
         this.content = content;
         this.date = date;
-        this.hastags = hastags;
+        this.hashtags = hashtags;
     }
     
     
@@ -54,7 +55,12 @@ public class Twitter {
         String[] hashs = n_content.split("#");
         
         for (String s : hashs){
-            hastags.add(s);
+            if (s.matches("[ ]*")){
+                //não adicionar vazio
+            } else {
+                hashtags.add(s);
+            }
+            
         }
         
         
@@ -63,7 +69,7 @@ public class Twitter {
     @Override
     public String toString() {
         String hash = "";
-        for (String s : this.hastags){
+        for (String s : this.hashtags){
             hash+=s + "\n";
         }
         
