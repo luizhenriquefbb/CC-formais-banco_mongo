@@ -300,9 +300,10 @@ public class DBOperations {
             collection_twitteres.insertOne(doc1);
             Document a = collection_twitteres.find(eq("Code",t.code)).first();
             ObjectId obj = a.getObjectId("_id");
-            if(obj!= null)
+            if(obj!= null){
                 collection_users.updateOne(eq("User", u.user), new Document("$addToSet", new Document("Tweet", obj)));
-            else
+                u.tweet.add(t);
+            }else
                 System.err.println("falha nossa:Falha no update de Tweet");
         }catch (MongoWriteException e){
             System.err.println("falha nossa");
