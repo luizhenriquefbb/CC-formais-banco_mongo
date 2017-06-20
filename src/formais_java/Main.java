@@ -181,17 +181,18 @@ public class Main {
                     break;
                     
                 case 10: //twittar
-                    System.out.println("digite o user que twitta");
-                    nick = read.nextLine();
-                    user_obj = DBOperations.findUserByNick(nick);
-                    if (user_obj == null){
-                        System.err.println("usuario nao existe");
-                        break;
-                    }
-                    
-                    System.out.println("digite o TWITTER");
-                    message = read.nextLine();
-                    DBOperations.twittar(user_obj,message);
+                    System.out.println("Em desenvolvimento...");
+//                    System.out.println("digite o user que twitta");
+//                    nick = read.nextLine();
+//                    user_obj = DBOperations.findUserByNick(nick);
+//                    if (user_obj == null){
+//                        System.err.println("usuario nao existe");
+//                        break;
+//                    }
+//                    
+//                    System.out.println("digite o TWITTER");
+//                    message = read.nextLine();
+//                    DBOperations.twittar(user_obj,message);
                     break;
                     
                 case 11://Twittar Massivo
@@ -211,20 +212,22 @@ public class Main {
                     break;
               
                 case 12: //Buscar uma hashtag
-                    System.out.println("Digite a hashtag a ser buscada");
-                    hashtag = read.nextLine();
-                    ArrayList<Twitter> search_twitter = DBOperations.findHashtags(hashtag);
-                    if (search_twitter == null){
-                        System.out.println("hashtag nao encontrada");
-                        break;
-                    }
                     
-                    System.out.println("foram encontradas "+ search_twitter.size() + 
-                            " twitters com essa hash");
-                    for (Twitter t : search_twitter){
-                        System.out.println(t);
-                    }
-                    
+                    System.out.println("em desenvolvimento...");
+//                    System.out.println("Digite a hashtag a ser buscada");
+//                    hashtag = read.nextLine();
+//                    ArrayList<Twitter> search_twitter = DBOperations.findHashtags(hashtag);
+//                    if (search_twitter == null){
+//                        System.out.println("hashtag nao encontrada");
+//                        break;
+//                    }
+//                    
+//                    System.out.println("foram encontradas "+ search_twitter.size() + 
+//                            " twitters com essa hash");
+//                    for (Twitter t : search_twitter){
+//                        System.out.println(t);
+//                    }
+//                    
                     
                     break;
                     
