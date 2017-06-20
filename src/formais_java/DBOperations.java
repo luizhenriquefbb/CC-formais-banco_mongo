@@ -1,17 +1,15 @@
 package formais_java;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.FindIterable;
 import static com.mongodb.client.model.Filters.*;
 import com.mongodb.client.result.DeleteResult;
-import static formais_java.Main.collection_twitteres;
 import static formais_java.Main.collection_users;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static javax.swing.text.html.HTML.Tag.HEAD;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -146,7 +144,7 @@ public class DBOperations {
     }
     
     static void clearCollectionTwitts(){
-        DeleteResult deleteResult = collection_twitteres.deleteMany(gte("Code", "")); //delentando tudo de 'users' //TODO: TESTAR
+        DeleteResult deleteResult = Main.collection_twitteres.deleteMany(gte("Code", "")); //delentando tudo de 'users' //TODO: TESTAR
         System.out.println("deletou " + deleteResult.getDeletedCount());
     }
     
@@ -200,9 +198,9 @@ public class DBOperations {
         t.code = u.user+"-"+(u.tweet.size());
         System.out.println(t.code);
         Document doc1 = tweetToDocument(t);
-        collection_twitteres.insertOne(doc1);
+        Main.collection_twitteres.insertOne(doc1);
         
-        Document a = collection_twitteres.find(eq("Code",t.code)).first();
+        Document a = Main.collection_twitteres.find(eq("Code",t.code)).first();
         ObjectId obj = a.getObjectId("_id");
         collection_users.updateOne(gte("User", u.user), new Document("$addToSet", new Document("tweet", obj)));
 
@@ -233,16 +231,16 @@ public class DBOperations {
         System.out.println(t.code);
         
         Document doc1 = tweetToDocument(t);
-        collection_twitteres.insertOne(doc1);
+        Main.collection_twitteres.insertOne(doc1);
 
         //Busca por campo do array tweet
        // db.user.find({"User":"@user0","tweet.Code":"@user0-6"},{"tweet.$.Favoritos":1})
         System.out.println("");
-        Document a = collection_twitteres.find(eq("Code",t.code)).first();  
+        Document a = Main.collection_twitteres.find(eq("Code",t.code)).first();  
         collection_users.updateOne(gte("User", u.user), new Document("$addToSet", new Document("tweet", a)));
         u.tweet.add(t);
         
-        
+       
 
         
     }
