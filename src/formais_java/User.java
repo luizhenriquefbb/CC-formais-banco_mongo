@@ -1,11 +1,7 @@
 /*
- * Desenvolvio para a cadeira de Linguagens formais, professor Andrei _______
- * 
- * 
- * Desenvolvedores:
- * * Luiz Henrique Freire Barros (email: luizhenriquefbb@gmail.com)
- * * Gabriel Belarmino (email: ____)
- * 2017
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package formais_java;
 
@@ -13,7 +9,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author LuizHenrique
+ * @author lhfba
  */
 public class User {
     String name, user, password, email, country, language, telephone;
@@ -67,12 +63,15 @@ public class User {
 		"email = " + this.email + "\n" +
 		"country = " + this.country + "\n" +
 		"language = " + this.language + "\n" +
-		"telephone = " + this.telephone + "\n" //+
-//		"tweet = " + this.tweet + "\n" +
-//		"follow = " + this.follow + "\n" +
-//		"followed = " + this.followed + "\n"
-                ;
+		"telephone = " + this.telephone + "\n" +
+		"tweet = " + this.tweet + "\n" +
+		"follow = " + this.follow + "\n" +
+		"followed = " + this.followed + "\n";
     }
     
+    public void set_tweet(String id, String content){
+        this.tweet.add(new Twitter(content));
+        //TODO: setar no banco
+    }
     
 }

@@ -1,6 +1,7 @@
 /*
  * Linkando mongo com java
  * Fonte: http://mongodb.github.io/mongo-java-driver/3.4/driver/getting-started/quick-start/
+         
  *
  */
 package referencia;
@@ -26,6 +27,9 @@ import org.bson.*;
  * @author Luiz & gabriel
  */
 public class TesteMongo {
+
+   
+    
 
     //iniciar MongoClinet(ip, porta)
     static MongoClient m1 = new MongoClient("localhost", 27017);
