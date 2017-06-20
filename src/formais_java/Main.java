@@ -28,11 +28,11 @@ public class Main {
     static MongoClient m1 = new MongoClient("localhost", 27017);
 
     //MongoDataBase eh imutavel, por isso static
-    static MongoDatabase dataBase1 = m1.getDatabase("twitter");
+    static MongoDatabase dataBase1 = m1.getDatabase("LFA");
 
     //abrindo documentos
-    static MongoCollection<Document> collection_users = dataBase1.getCollection("users");
-    static MongoCollection<Document> collection_twitteres = dataBase1.getCollection("twitter");
+    static MongoCollection<Document> collection_users = dataBase1.getCollection("user");
+    static MongoCollection<Document> collection_twitteres = dataBase1.getCollection("tweet");
     
     
     /**

@@ -1,5 +1,6 @@
 package formais_java;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.FindIterable;
 import static com.mongodb.client.model.Filters.*;
@@ -8,6 +9,7 @@ import static formais_java.Main.collection_twitteres;
 import static formais_java.Main.collection_users;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bson.Document;
@@ -63,8 +65,8 @@ public class DBOperations {
     //TODO: tratar retorno null
     public static User findUserByNick(String nick){
         User user;
-        Document doc1 = Main.collection_users.find(gte("User", nick)).first();
-        
+        Document doc1 = Main.collection_users.find(eq("User", nick)).first();
+        System.out.println(doc1);
         user = new User((String) doc1.get("Nome"),
                 (String) doc1.get("User"),
                 (String) doc1.get("Senha"),
@@ -222,16 +224,25 @@ public class DBOperations {
                             "#Happy2017 Happy New Year to all, including to my many enemies and those who have fought me and lost so badly they just don't know what to do. Love!"
          };
         System.out.println("Size = "+u.tweet.size());
+        //pegar um twt aleatorio
         String tweet = tweets[(int)Math.ceil(Math.random() * tweets.length)-1];
         System.out.println(tweet);
+        
         Twitter t = new Twitter(tweet);
         t.code = u.user+"-"+(u.tweet.size());
         System.out.println(t.code);
+        
         Document doc1 = tweetToDocument(t);
         collection_twitteres.insertOne(doc1);
-        
+
+        //Busca por campo do array tweet
+       // db.user.find({"User":"@user0","tweet.Code":"@user0-6"},{"tweet.$.Favoritos":1})
+        System.out.println("");
         Document a = collection_twitteres.find(eq("Code",t.code)).first();  
         collection_users.updateOne(gte("User", u.user), new Document("$addToSet", new Document("tweet", a)));
+        u.tweet.add(t);
+        
+        
 
         
     }
